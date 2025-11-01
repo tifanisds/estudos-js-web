@@ -195,3 +195,106 @@ Pense no servidor como um prédio:
 |--------|-------|-----------|---------------------|
 | **80** | HTTP (HyperText Transfer Protocol) | Comunicação padrão sem criptografia | É usada para o tráfego comum da web. Quando você acessa http://site.com, o navegador se conecta à porta 80 do servidor. Os dados viajam em texto puro, o que significa que podem ser interceptados facilmente. |
 | **443** | HTTPS (HyperText Transfer Protocol Secure) | Comunicação segura e criptografada | É usada para conexões HTTPS, que utilizam SSL/TLS para proteger os dados trocados entre cliente e servidor. Quando você acessa https://site.com, o navegador se conecta à porta 443 e estabelece uma conexão segura (com o cadeado na barra de endereços). |
+
+# REQUISIÇÕES HTTP (HTTP Requests)
+Quando você acessa um site, envia um formulário ou clica em um botão que carrega algo novo, o navegador (cliente) envia uma requisição HTTP para o servidor.
+Essa requisição é como uma mensagem dizendo:
+
+“Ei servidor, eu quero acessar ou enviar algo!”
+
+O servidor, por sua vez, responde com uma resposta HTTP (HTTP Response), que contém o que foi pedido (uma página, uma imagem, dados etc).
+
+## Estrutura de uma requisição:
+
+Uma requisição HTTP é composta por três partes principais:
+
+1. Linha de requisição (Request line)
+→ Informa o que o cliente quer fazer (método + URL + versão).
+
+2. Cabeçalhos (Headers)
+→ Enviam informações adicionais sobre a requisição (quem está pedindo, que tipo de conteúdo aceita, etc).
+
+3. Corpo (Body) (opcional)
+→ Contém dados que o cliente envia para o servidor (por exemplo, dados de um formulário ou JSON em uma API).
+
+EXEMPLO:
+
+<img src="./assets/img/requisicao-http.png" alt="Exemplo de requisição HTTP" width="600">
+
+## Componentes
+
+### Método HTTP
+O método indica qual ação o cliente deseja que o servidor realize sobre o recurso.
+
+| Método | O que faz | Exemplo prático |
+|--------|-------|-----------|
+| **GET** | Solicita dados do servidor | Buscar uma lista de produtos |
+| **POST** | Envia dados para o servidor (criar algo) | Enviar um formulário de cadastro |
+| **PUT** | Atualiza um recurso existente | Editar os dados de um produto |
+| **PATCH** | Atualiza parte de um recurso | Alterar apenas o preço de um produto |
+| **DELETE** | Remove um recurso do servidor | Apagar um usuário |
+| **HEAD** | Igual ao GET, mas retorna apenas os cabeçalhos | Verificar se um recurso existe |
+| **OPTIONS** | Mostra os métodos permitidos pelo servidor | Descobrir se é permitido POST ou GET em uma rota |
+
+
+### URL / caminho do recurso
+A URL (Uniform Resource Locator) indica onde está o recurso que o cliente quer acessar no servidor.
+É como o “endereço” de destino da requisição.
+
+Exemplo:
+Imagine que você está acessando uma API real de loja online chamada PetShop+, e quer buscar informações sobre um produto específico, por exemplo, um colar para cachorro com ID 15.
+
+```bash
+GET https://api.petshopplus.com.br/produtos/15 HTTP/1.1
+```
+
+### Versão do protocolo (HTTP/1.1, HTTP/2, HTTP/3)
+Indica qual versão do protocolo HTTP está sendo usada na comunicação.
+Cada versão trouxe melhorias de velocidade, segurança e eficiência.
+
+| Versão | Nome | Características principais |
+|--------|-------|-----------|
+| **HTTP/1.1** | Tradicional e mais comum | Requisições feitas uma por vez (mais lentas) |
+| **HTTP/2** | Mais rápida e eficiente | Envia múltiplos dados em uma única conexão |
+| **HTTP/3** | Mais moderna | Usa QUIC (baseado em UDP), muito mais rápida e estável |
+
+EXEMPLO DE REQUISIÇÃO:
+```bash
+GET /produtos HTTP/1.1
+```
+→ Aqui temos o método (GET), o recurso (/produtos) e a versão (HTTP/1.1).
+
+### Cabeçalhos (Headers)
+Os headers são informações extras enviadas junto com a requisição.
+Eles funcionam como metadados (informações que descrevem e fornecem contexto para outros dados), ajudando o servidor a entender quem está fazendo a requisição, o que aceita receber e como deve processar.
+
+Aqui estão os principais cabeçalhos usados em requisições HTTP:
+
+| Cabeçalho | O que faz | Exemplo | Explicação |
+|--------|---------------|-------------------|------------------------------------|
+| **Host** | Informa o domínio do servidor que está sendo acessado | `Host: www.exemplo.com` | É obrigatório no HTTP/1.1, pois permite que um mesmo servidor hospede vários sites. |
+| **User-Agent** | Identifica o cliente (navegador ou app) que está fazendo a requisição | `User-Agent: Mozilla/5.0` | Ajuda o servidor a adaptar o conteúdo (por exemplo, versão mobile). |
+| **Accept** | Indica o tipo de resposta que o cliente aceita receber | `Accept: application/json` | Define se o cliente quer receber JSON, HTML, XML etc. |
+| **Content-Type** | Indica o formato dos dados enviados no corpo da requisição | `Content-Type: application/json` | O servidor usa isso para interpretar corretamente o conteúdo recebido. |
+| **Authorization** | Envia credenciais de autenticação | `Authorization: Bearer eyJhbGci...` | Usado para acessar APIs protegidas com tokens ou login. |
+| **Referer** | Informa de onde veio a requisição (a página anterior) | `Referer: https://meusite.com/home` | Ajuda no rastreamento e segurança. |
+| **Origin** | Indica a origem do pedido (domínio, protocolo e porta) | `Origin: https://meusite.com` | Usado no controle de acesso CORS entre domínios diferentes. |
+
+Os cabeçalhos ajudam o servidor a entender o contexto da requisição, quem está pedindo e como deve responder.
+
+### Corpo (Body) — presente em métodos como POST, PUT, PATCH
+O corpo da requisição (Body) contém dados que o cliente envia ao servidor.
+Nem todos os métodos têm corpo — ele é usado principalmente em:
+- POST → criar recursos
+- PUT → atualizar recursos
+- PATCH → modificar parcialmente
+
+O corpo pode conter diferentes tipos de dados:
+
+| Tipo de conteúdo | Content-Type | Exemplo de uso |
+|--------|-------|-----------|
+| **JSON** | `application/json` | APIs modernas → `{ "nome": "Tifani", "idade": 20 }` |
+| **Formulário HTML** | `application/x-www-form-urlencoded` | Envio de formulários → `nome=Tifani&idade=20` |
+| **Multipart/Form-Data** | `multipart/form-data` | Upload de arquivos e imagens |
+| **Texto simples** | `text/plain` | Dados simples sem estrutura |
+| **XML** | `application/xml` | Sistemas antigos ou legados |
