@@ -298,3 +298,70 @@ O corpo pode conter diferentes tipos de dados:
 | **Multipart/Form-Data** | `multipart/form-data` | Upload de arquivos e imagens |
 | **Texto simples** | `text/plain` | Dados simples sem estrutura |
 | **XML** | `application/xml` | Sistemas antigos ou legados |
+
+### Request body e Query params
+- Query params (parâmetros de consulta) ficam na URL depois do ? (ex.: ?q=busca&page=2). Usados para filtrar, paginar, ordenar ou informar opções sobre a requisição. São curtos, visíveis e geralmente usados em requisições GET.
+- Request body (corpo da requisição) é o conteúdo enviado no corpo da mensagem HTTP (ex.: JSON, form-data). Usado para enviar dados estruturados: criar/atualizar recursos, submeter formulários, enviar arquivos. Normalmente em POST, PUT, PATCH (raramente em GET).
+
+
+# STATUS CODES HTTP
+Os códigos de status de resposta HTTP indicam se uma solicitação HTTP específica foi concluída com êxito. As respostas são agrupadas em cinco classes:
+
+- Respostas Informativas (100 – 199)
+- Respostas bem-sucedidas (200 – 299)
+- Mensagens de redirecionamento (300 – 399)
+- Respostas de erro do cliente (400 – 499)
+- Respostas de erro do servidor (500 – 599)
+
+<img src="./assets/img/status-code.jpg" alt="Status Code" width="600">
+
+## Respostas informativas (100)
+### 100 Continue
+Essa resposta provisória indica que o cliente deve continuar a solicitação ou ignorar a resposta se a solicitação já estiver concluída.
+
+### 101 Switching Protocols
+Esse código é enviado em resposta a um cabeçalho de solicitação Upgrade do cliente e indica o protocolo para o qual o servidor está mudando.
+
+## Respostas bem-sucedidas (200)
+### 200 OK
+A solicitação foi bem-sucedida. O significado do resultado de "sucesso" depende do método HTTP:
+- GET: O recurso foi obtido e transmitido no corpo da mensagem.
+- HEAD: Os cabeçalhos de representação são incluídos na resposta sem nenhum corpo de mensagem.
+- PUT ou POST: O recurso que descreve o resultado da ação é transmitido no corpo da mensagem.
+- TRACE: O corpo da mensagem contém a mensagem de requisição recebida pelo servidor.
+
+### 201 Created
+A requisição foi bem sucedida e um novo recurso foi criado como resultado. Esta é normalmente a resposta enviada após as solicitações POST ou algumas solicitações PUT.
+
+### 204 No Content
+Não há conteúdo para enviar para esta solicitação, mas os cabeçalhos podem ser úteis. O agente do usuário pode atualizar seus cabeçalhos em cache para este recurso com os novos.
+
+## Mensagens de redirecionamento (300)
+### 301 Moved Permanently
+A URL do recurso solicitado foi alterada permanentemente. A nova URL é fornecida na resposta.
+
+### 307 Temporary Redirect
+O servidor envia esta resposta para direcionar o cliente a obter o recurso solicitado em outra URI com o mesmo método usado na solicitação anterior. Tem a mesma semântica do código de resposta HTTP 302 Found, com a exceção de que o agente do usuário não deve alterar o método HTTP usado: se um POST foi usado na primeira solicitação, um POST deve ser usado no segundo pedido.
+
+### 308 Permanent Redirect
+Isso significa que o recurso agora está permanentemente localizado em outro URI, especificado pelo cabeçalho de resposta HTTP Location:. 
+
+## Respostas de erro do cliente (400)
+### 400 Bad Request
+O servidor não pode ou não irá processar a solicitação devido a algo que é percebido como um erro do cliente (por exemplo, sintaxe de solicitação malformada, enquadramento de mensagem de solicitação inválida ou roteamento de solicitação enganosa).
+
+### 401 Unauthorized
+Embora o padrão HTTP especifique "unauthorized", semanticamente, essa resposta significa "unauthenticated". Ou seja, o cliente deve se autenticar para obter a resposta solicitada.
+
+### 403 Forbidden   
+O cliente não tem direitos de acesso ao conteúdo; ou seja, não é autorizado, portanto o servidor está se recusando a fornecer o recurso solicitado. Ao contrário do 401 Unauthorized, a identidade do cliente é conhecida pelo servidor.
+
+### 404 Not Found
+O servidor não pode encontrar o recurso solicitado. No navegador, isso significa que o URL não é reconhecido. Em uma API, isso também pode significar que o endpoint é válido, mas o próprio recurso não existe. Os servidores também podem enviar esta resposta em vez de 403 Forbidden para ocultar a existência de um recurso de um cliente não autorizado. Este código de resposta é provavelmente o mais conhecido devido à sua ocorrência frequente na web.
+
+## Respostas de erro do servidor (500)
+### 502 Bad Gateway
+Essa resposta de erro significa que o servidor, enquanto trabalhava como um gateway para obter uma resposta necessária para lidar com a solicitação, obteve uma resposta inválida.
+
+### Gateway Timeout
+Essa resposta de erro é fornecida quando o servidor está atuando como um gateway e não consegue obter uma resposta a tempo.
