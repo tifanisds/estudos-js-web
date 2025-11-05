@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Imagens de Cães</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h1 {
+            color: #f5576c;
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 35px;
+        }
+
+        .image-container {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dog-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .dog-image:hover {
+            transform: scale(1.02);
+        }
+
+        .loading-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f5576c;
+            display: none;
+        }
+
+        .loading-text.show {
+            display: block;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(245, 87, 108, 0.4);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff9c4 0%, #ffeb3b 100%);
+            border-radius: 15px;
+            border-left: 5px solid #ffd700;
+        }
+
+        .info-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f5576c;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .header-icon {
+                font-size: 60px;
+            }
+
+            .dog-image {
+                height: 300px;
+                font-size: 80px;
+            }
+
+            .generate-btn {
+                font-size: 16px;
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-icon">🐶</div>
+        <h1>Gerador de Cães</h1>
+        <p class="subtitle">Clique no botão para gerar uma nova imagem aleatória</p>
+
+        <div class="image-container">
+            <div class="dog-image">
+                🐕
+            </div>
+            <div class="loading-text">Carregando... 🐾</div>
+        </div>
+
+        <button class="generate-btn">🎲 Gerar Nova Foto</button>
+
+        <div class="info-box">
+            <div class="info-title">💡 Como funciona</div>
+            <div class="info-text">
+                Cada clique gera uma imagem aleatória de um cachorro fofo! 
+                Perfeito para alegrar seu dia! 🐾
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Fotos Geradas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Favoritos</div>
+            </div>
+        </div>
+        <img src="" alt="">
+    </div>
+
+    <script>
+
+        const btnGerarFoto = document.querySelector('.generate-btn') //Seleciona o botão que futuramente será responsável por fazer as trocas de imagens
+        const imgDiv = document.querySelector('.dog-image') //Seleciona o container em que a imagem irá ficar
+        
+        btnGerarFoto.addEventListener('click', () => {
+            const img = document.createElement('img') //Cria o elemento imagem
+            const loading = document.querySelector('.loading-text') //Seleciona o elemento de carregamento
+            loading.classList.add('show') //Exibe a mensagem de carregamento
+
+            fetch('https://dog.ceo/api/breeds/image/random') //Requisição para api - retorna uma promise
+                .then(response => response.json()) //Após a promise ser resolvida, deverá modificar para formato json que retornará outra promise
+                .then(data => { //Após modificação para formato jsom, deverá ser feito:
+                    img.setAttribute('src', data.message) //Adicionar atributo src para que a imagem seja exibida
+                    img.style.width = '100%' //Adiciona largura
+                    img.style.borderRadius = '15px' //Adiciona arredondamento dos cantos
+                    imgDiv.innerHTML = '' //Esvaziar o imgDiv antes de adc um novo elemento
+                    imgDiv.appendChild(img) //Adiciona a imagem retornada
+
+                    loading.classList.remove('show') //Mensagem de carregamento removida
+                })
+                .catch(erro => console.log(`Não foi possivel carregar a imagem ${erro}`))
+        })
+    </script>
+</body>
+
+</html>
