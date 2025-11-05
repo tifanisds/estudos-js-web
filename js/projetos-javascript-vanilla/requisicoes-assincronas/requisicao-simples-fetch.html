@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requisições simples com fetch</title>
+</head>
+<body>
+    
+</body>
+
+<script>
+    //Faça uma requisição GET e exiba os dados no console.
+    //Desafio: exiba também response.status e response.ok.
+
+    fetch('https://servicodados.ibge.gov.br/api/v2/censos/nomes/tifani') //Tentará fazer a requisição para essa api
+        .then(response => { //Caso a requisição seja bem sucedida, iremos entrar nesse bloco de then
+            console.log(response.status) // Irá imprimir o console o status da requisição, nesse caso 200
+            console.log('OK:' + response.ok) // Booleano que verifica se a requisição foi bem sucedida
+            
+            return response.json() //Transforma a resposta da requisição em formato json, essa transformação resulta numa nova promise que deverá ser tratada
+        }) 
+        .then(data => console.log(data)) //Caso a transformação seja bem sucedida, o json será exibido em console
+        .catch(err => console.log('Não foi possivel pegar essa informação')) //Em casos de erro na requisição, será exibida ima mensagem em concole
+        
+    //--------------------------------------------------------------------------------
+    //Refazendo o exemplo anterior com async/await
+
+    async function buscarNome() {
+        try {
+            const resposta = await fetch('https://serviscodados.ibge.gov.br/api/v2/censos/nomes/andrei') //Faz a requisição para a api e espera uma resposta de sucesso ou erro
+            console.log(resposta.status) //Imorime no terminal o status code da requisição
+            console.log('OK: ' + resposta.ok) //Imprime se a requisição foi bem sucedida ou não
+
+            const json = await resposta.json() //Espera a resposta da solicitação de transformação para json
+            console.log(json) //Imprime essa resposta no console
+        } catch(erro) {
+            console.log('Não foi possível exibir o resultado: ' + erro) //Tratamento de erro. Caso algo de errado durante esse processo, uma mensagem será exibida no console junto com a informação de erro
+        }
+    }
+
+    buscarNome() //Chama a função
+</script>
+</html>
