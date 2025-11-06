@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Avatar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        .avatar-section {
+            margin-bottom: 40px;
+        }
+
+        .avatar-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .avatar-display {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-display:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.5);
+        }
+
+        .avatar-initials {
+            font-size: 80px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .avatar-icon {
+            font-size: 100px;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .name-input::placeholder {
+            color: #999;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .options-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+        }
+
+        .options-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            width: 50px;
+            height: 50px;
+            border: 3px solid transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+            border-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-btn.selected {
+            border-color: white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+
+        .color-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .color-pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .color-blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .color-green { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .color-orange { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+
+        .info-text {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff9c4;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #666;
+            border-left: 4px solid #ffd700;
+            text-align: left;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 35px 25px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .avatar-display {
+                width: 160px;
+                height: 160px;
+            }
+
+            .avatar-initials {
+                font-size: 60px;
+            }
+
+            .avatar-icon {
+                font-size: 80px;
+            }
+
+            .submit-btn {
+                font-size: 16px;
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>👤 Gerador de Avatar</h1>
+        <p class="subtitle">Crie seu avatar personalizado em segundos</p>
+
+        <div class="avatar-section">
+            <div class="avatar-label">Seu Avatar</div>
+            <div class="avatar-display">
+                <div class="avatar-icon">👤</div>
+                <!-- Quando houver nome, mostrar: -->
+                <!-- <div class="avatar-initials">JD</div> -->
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-group">
+                <label for="name">Digite seu nome:</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    class="name-input" 
+                    placeholder="Ex: João Silva"
+                >
+            </div>
+
+            <button class="submit-btn">✨ Gerar Avatar</button>
+        </div>
+
+        <div class="info-text">
+            💡 <strong>Dica:</strong> Digite seu primeiro nome e escolha uma cor para gerar um avatar único com suas iniciais!
+        </div>
+    </div>
+
+    <script>
+const enviarBtn = document.querySelector('.submit-btn');
+const input = document.querySelector('.name-input');
+const divAvatar = document.querySelector('.avatar-display');
+
+enviarBtn.addEventListener('click', () => {
+    const nomeUsuario = input.value.trim();
+
+    if (!nomeUsuario) {
+        alert('Por favor, digite um nome!');
+        return;
+    }
+
+    // Gera a URL da imagem diretamente
+    const urlAvatar = `https://api.dicebear.com/8.x/pixel-art/svg?seed=${nomeUsuario}`;
+
+    // Limpa o avatar anterior
+    divAvatar.innerHTML = '';
+
+    // Cria um elemento <img> e adiciona no container
+    const img = document.createElement('img');
+    img.src = urlAvatar;
+    img.alt = `Avatar de ${nomeUsuario}`;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.borderRadius = '50%';
+
+    // Adiciona o novo avatar
+    divAvatar.appendChild(img);
+});
+
+    </script>
+</body>
+
+</html>

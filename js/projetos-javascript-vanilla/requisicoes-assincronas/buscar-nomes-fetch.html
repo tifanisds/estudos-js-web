@@ -181,17 +181,17 @@
     </div>
 
     <script>
-        const input = document.querySelector('#name')
-        const btnEnviar = document.querySelector('.submit-btn')
-        const resultado = document.querySelector('.result-value')
+        const input = document.querySelector('#name') //Seleciona o input que o usuario irá inserir seu nome
+        const btnEnviar = document.querySelector('.submit-btn') //Seleciona o botão responsavel por enviar os valores
+        const resultado = document.querySelector('.result-value') //Seleciona o espaço de resultado
 
         btnEnviar.addEventListener('click', () => {
-            let nomeEnviado = input.value.trim()
+            let nomeEnviado = input.value.trim() //Limpa o valor enviado, tirando os espaços em branco
 
-            fetch(`https://servicodados.ibge.gov.br/api/v2/censos/nomes/${nomeEnviado}`)
-                .then(response => response.json())
-                .then(data => resultado.innerText = JSON.stringify(data))
-                .catch(erro => console.log(`Não foi possivel concluir a requisição ${erro}`))
+            fetch(`https://servicodados.ibge.gov.br/api/v2/censos/nomes/${nomeEnviado}`) //Faz a requisição para a api juntando com o nome enviado pelo usuário
+                .then(response => response.json()) //Após a promise ser bem sucedida, seu resultado será transformado em um json que resultará numa nova promise
+                .then(data => resultado.innerText = JSON.stringify(data)) //Após a promise ser bem sucedida, seu resultado sera transformado em string e passado para dentro de resultado
+                .catch(erro => console.log(`Não foi possivel concluir a requisição ${erro}`)) //Mensagem de erro caso a operação de erro
         })
 
     </script>
