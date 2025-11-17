@@ -59,3 +59,114 @@ Observe como apenas o <span> é atualizado, sem recarregar a página ou manipula
 </div>
 ```
 
+## Diretivas Essenciais
+### x-data (estado)
+O que faz: define o estado inicial do componente Alpine. Deve ser um objeto literal ou função que retorna objeto (quando você precisa de lógica/encapsulamento).
+
+```js
+<div x-data="{ count: 0, theme: 'light' }">
+  <button @click="count++">+</button>
+  <p x-text="count"></p>
+</div>
+
+```
+
+Tipos de valores
+
+- Simples: números, strings, booleanos.
+
+- Estruturas: objetos, arrays. Declare todas as propriedades que serão usadas para garantir reatividade previsível.
+
+- Funções: métodos para manipular estado (defina dentro do objeto).
+
+Padrões
+
+- Objeto literal (rápido para casos simples):
+x-data="{ open: false }"
+
+- Factory function (bom para componentes reutilizáveis e para evitar compartilhamento de estado entre instâncias):
+```js
+function modal() {
+  return { open: false, openModal() { this.open = true } }
+}
+
+```
+e no HTML: `<div x-data="modal()">...</div>`
+
+### x-text e x-html
+- x-text: insere texto (escapado). Substitui innerText.
+`<p x-text="user.name"></p>`
+
+- x-html: insere HTML sem escapar (usa com cuidado — risco XSS).
+`<div x-html="trustedHtml"></div>`
+
+#### Diferença principal:
+x-text → seguro (escapa), x-html → injeta HTML bruto.
+
+### x-bind e :atributo
+O que faz: liga um atributo HTML a uma expressão reativa.
+
+Atalho: :attr em vez de x-bind:attr.
+
+```html
+<button :disabled="!form.valid">Enviar</button>
+<img :src="user.avatarUrl">
+<div :class="{ 'is-active': active, 'is-error': error }"></div>
+
+```
+
+#### :class com objetos e arrays
+
+- Objeto: :class="{ 'active': isActive, 'red': isError }"
+
+- Array: :class="[ baseClass, isActive ? 'active' : '' ]"
+
+### x-on / @event — Eventos
+x-on:click="..." (atalho @click) liga manipuladores de eventos do DOM ao estado.
+
+`<button @click="open = !open">Toggle</button>`
+
+#### Passar parâmetros
+`<button @click="addItem('foo', 3)">Adicionar</button>`
+
+### x-show vs x-if (quando usar cada)
+#### x-show
+- Oculta com CSS (display: none) mantendo elemento no DOM.
+
+- Rápido para alternância, mantém estado interno (ex.: inputs não perdem valor).
+
+- Ideal para toggles simples, animações (com x-transition).
+
+`<div x-show="open">conteúdo</div>`
+
+#### x-if
+- Remove/insere elemento no DOM (usa <template x-if>).
+
+- Bom quando a renderização é pesada ou precisa recriar o componente a cada exibição (ex.: limpar estado interno).
+
+- Mais custoso se você alternar frequentemente (recria listeners, elementos, etc).
+
+```html
+<template x-if="open">
+  <div>conteúdo completo</div>
+</template>
+
+```
+
+### x-for — Repetição
+Use x-for para renderizar listas. Sempre coloque dentro de <template> para evitar duplicação de marcação desnecessária.
+
+```html
+<template x-for="(item, idx) in items" :key="idx">
+  <div x-text="item.name"></div>
+</template>
+
+```
+
+Boas práticas
+
+- Sempre fornecer :key (único por item) para ajudar na reatividade e evitar rerender desnecessário.
+
+- Se iterar um array de objetos, prefira usar :key="item.id" (se existir).
+
+- Mutação da lista (push, splice) é observada; Alpine re-renderiza eficientemente.
