@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h3>
+        Peça email e senha. <br>
+
+        Se preenchidos, salve “logado = true” no localStorage. <br>
+
+        Ao recarregar, o usuário deve continuar logado.<br>
+
+        Botão “sair” deve remover o item.
+    </h3>
+
+    <div>
+        <label for="login">Login</label>
+        <input type="text" name="login" id="login">
+    </div>
+
+    <br>
+
+    <div>
+        <label for="senha">Senha</label>
+        <input type="text" name="senha" id="senha">
+    </div>
+
+    <br>
+
+    <button class="logar">Logar</button>
+
+    <div class="mensagemSecreta">
+
+    </div>
+
+    <script>
+        localStorage.setItem('login', 'tifanisds@gmail.com')
+        localStorage.setItem('senha', 'essaSenhaSecreta')
+
+        const inputLogin = document.querySelector('#login')
+        const inputSenha = document.querySelector('#senha')
+        const logatBtn = document.querySelector('.logar')
+        const mensagemSecreta = document.querySelector('.mensagemSecreta')
+
+        logatBtn.addEventListener('click', () => {
+            if (inputLogin.value == localStorage.getItem('login') && inputSenha.value == localStorage.getItem('senha')) {
+                localStorage.setItem('estaLogado', 'true')
+            } else {
+                localStorage.setItem('estaLogado', 'false')
+            }
+        })
+
+        if (localStorage.getItem('estaLogado') == 'true') {
+            const p = document.createElement('p')
+            p.innerText = 'Você está logado'
+            mensagemSecreta.appendChild(p)
+        }
+    </script>
+</body>
+
+</html>
