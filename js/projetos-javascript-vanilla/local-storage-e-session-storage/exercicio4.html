@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>
+        Crie um contador que: <br>
+
+        começa em 0 toda vez que abrir a aba <br>
+
+        aumenta com um botão <br>
+
+        desaparece ao fechar a aba 
+    </h3>
+
+    <p class="contador"></p>
+    <button class="aumentar">Aumentar</button>
+
+    <script>
+        //O conteúdo zera a cada sessão aberta
+
+        const p = document.querySelector('.contador')
+        const buttonAumentar = document.querySelector('.aumentar')
+
+        if(!sessionStorage.getItem('valor')) {
+            sessionStorage.setItem('valor', 0)
+        }
+
+        p.innerText = sessionStorage.getItem('valor')
+
+        let contador = Number(sessionStorage.getItem('valor'))
+
+        buttonAumentar.addEventListener('click', () => {
+            contador++
+            sessionStorage.setItem('valor', contador)
+            p.innerText = contador
+        })
+    </script>
+</body>
+</html>
