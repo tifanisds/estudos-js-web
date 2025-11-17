@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>
+        Crie um botão “+1”. <br>
+
+        Cada clique aumenta um contador. <br>
+
+        O valor deve ser salvo no localStorage. <br>
+
+        Recarregar a página não pode zerar. <br>
+
+        Treina: persistir valores numéricos
+    </h3>
+
+    <p>Número:</p>
+    <p class="contador"></p>
+
+    <button class="aumentar">Aumentar</button>
+    <button class="diminuir">Diminuir</button>
+
+
+    <script>
+        const aumentar = document.querySelector('.aumentar')
+        const diminuir = document.querySelector('.diminuir')
+
+        const p = document.querySelector('.contador')
+
+        p.innerText = Number(localStorage.getItem('quantidade'))
+        let contador = Number(localStorage.getItem('quantidade')) || 0
+
+        aumentar.addEventListener('click', () => {
+            contador++
+            localStorage.setItem('quantidade', contador)
+            p.innerText = Number(localStorage.getItem('quantidade'))
+        })
+
+        diminuir.addEventListener('click', () => {
+            contador = contador - 1
+            localStorage.setItem('quantidade', contador)
+            p.innerText = Number(localStorage.getItem('quantidade'))
+        })
+    </script>
+</body>
+</html>
